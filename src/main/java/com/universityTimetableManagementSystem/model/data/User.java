@@ -36,7 +36,7 @@ public class User {
   @NotBlank
   @Size(max = 120)
   private String password;
-
+//idiot
   @DBRef
   private Set<Role> roles;
 }
