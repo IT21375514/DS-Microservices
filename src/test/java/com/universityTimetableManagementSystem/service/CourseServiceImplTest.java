@@ -38,7 +38,7 @@ class CourseServiceImplTest {
   @Test
   void testCreateCourseExists() {
     Course course = getTestCourse();
-    Mockito.when(courseRepoMock.findByCode(CODE)).thenReturn(Optional.of(getTestCourse()));
+    Mockito.when(courseRepoMock.findById(CODE)).thenReturn(Optional.of(getTestCourse()));
     Assertions.assertThrows(CourseCollectionException.class, () -> onTest.createCourse(course));
   }
 
@@ -96,7 +96,7 @@ class CourseServiceImplTest {
     int newCredit = 30;
 
     Mockito.when(courseRepoMock.findById(any())).thenReturn(Optional.of(getTestCourse()));
-    Mockito.when(courseRepoMock.findByCourse(any())).thenReturn(Optional.of(getTestCourse("OTHER_CODE", newName)));
+    Mockito.when(courseRepoMock.findByCourseName(any())).thenReturn(Optional.of(getTestCourse("OTHER_CODE", newName)));
 
     Course courseToUpdate = getTestCourse(CODE, newName);
     courseToUpdate.setDescription(newDescription);

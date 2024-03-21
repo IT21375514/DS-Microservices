@@ -22,7 +22,7 @@ public class CourseServiceImpl implements CourseService {
   @Override
   public void createCourse(Course course)
       throws ConstraintViolationException, CourseCollectionException {
-    Optional<Course> courseOptional = courseRepo.findByCode(course.getCode());
+    Optional<Course> courseOptional = courseRepo.findById(course.getCode());
     if (courseOptional.isPresent()) {
       throw new CourseCollectionException(CourseCollectionException.CourseAlreadyExist());
     } else {
@@ -49,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
   @Override
   public void updateCourse(String code, Course course) throws CourseCollectionException {
     Optional<Course> courseWithCode = courseRepo.findById(code);
-    Optional<Course> courseWithSameName = courseRepo.findByCourse(course.getCourseName());
+    Optional<Course> courseWithSameName = courseRepo.findByCourseName(course.getCourseName());
     if (courseWithCode.isPresent()) {
 
       if (courseWithSameName.isPresent() && !courseWithSameName.get().getCode().equals(code)) {

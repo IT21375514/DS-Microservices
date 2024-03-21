@@ -11,10 +11,7 @@ import com.universityTimetableManagementSystem.model.data.Course;
 @Repository
 public interface CourseRepo extends MongoRepository<Course, String> {
 
-	@Query("{'course':?0}")
-	Optional <Course> findByCourse(String courseName);
-	
-	@Query("{'course':?0}")
-	Optional <Course> findByCode(String code);
+	Optional <Course> findByCourseName(String courseName);
+
 	
 }

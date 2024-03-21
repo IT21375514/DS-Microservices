@@ -4,8 +4,10 @@ import com.universityTimetableManagementSystem.exception.CourseFacultyCollection
 import com.universityTimetableManagementSystem.model.data.Course;
 import com.universityTimetableManagementSystem.model.data.CourseFaculty;
 import com.universityTimetableManagementSystem.model.data.CourseFacultyId;
+import com.universityTimetableManagementSystem.model.data.User;
 import com.universityTimetableManagementSystem.repository.CourseFacultyRepo;
 import com.universityTimetableManagementSystem.repository.CourseRepo;
+import com.universityTimetableManagementSystem.repository.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import java.sql.Date;
 import java.util.Collections;
@@ -20,26 +22,36 @@ public class CourseFacultyServiceImpl implements CourseFacultyService {
   private final CourseRepo courseRepo;
   private final CourseFacultyRepo courseFacultyRepo;
 
-  public CourseFacultyServiceImpl(CourseRepo courseRepo, CourseFacultyRepo courseFacultyRepo) {
+  private final UserRepository userRepository;
+
+  public CourseFacultyServiceImpl(CourseRepo courseRepo, CourseFacultyRepo courseFacultyRepo, UserRepository userRepository) {
     this.courseRepo = courseRepo;
     this.courseFacultyRepo = courseFacultyRepo;
+    this.userRepository = userRepository;
   }
 
   @Override
   public void createCourseFaculty(CourseFaculty courseFaculty)
-      throws ConstraintViolationException, CourseFacultyCollectionException {
+          throws ConstraintViolationException, CourseFacultyCollectionException {
 
-    Optional<Course> courseOptional = courseRepo.findByCode(courseFaculty.getId().getCode());
-    if (courseOptional.isEmpty()) {
+    Optional<Course> courseOptional = courseRepo.findById(courseFaculty.getId().getCode());
+    Optional<User> byUsername = userRepository.findByUsername(courseFaculty.getId().getFacultyId());
+    if (courseOptional.isEmpty() && byUsername.isPresent() && isUserFaculty(byUsername.get())) {
       courseFaculty.setCreated(new Date(System.currentTimeMillis()));
       courseFacultyRepo.save(courseFaculty);
     } else {
       throw new CourseFacultyCollectionException(
-          CourseFacultyCollectionException.CourseFacultyAlreadyExist());
+              CourseFacultyCollectionException.CourseFacultyAlreadyExist());
     }
 
-  }
+}
 
+  private boolean isUserFaculty(User user) {
+    return user
+            .getRoles()
+            .stream()
+            .anyMatch(role -> role.getName().name().equals("ROLE_FACULTY"));
+}
   @Override
   public List<CourseFaculty> getAllCourseFaculty() {
     List<CourseFaculty> courseFaculty = courseFacultyRepo.findAll();
