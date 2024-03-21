@@ -17,5 +17,5 @@ public class CourseFacultyId {
   private String code;
 
   @NotNull(message="Faculty cannot be null")
-  private String facultyId;
+  private String facultyUserName;
 }

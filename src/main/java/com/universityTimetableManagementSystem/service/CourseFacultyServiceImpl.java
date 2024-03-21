@@ -35,13 +35,18 @@ public class CourseFacultyServiceImpl implements CourseFacultyService {
           throws ConstraintViolationException, CourseFacultyCollectionException {
 
     Optional<Course> courseOptional = courseRepo.findById(courseFaculty.getId().getCode());
-    Optional<User> byUsername = userRepository.findByUsername(courseFaculty.getId().getFacultyId());
-    if (courseOptional.isEmpty() && byUsername.isPresent() && isUserFaculty(byUsername.get())) {
+    Optional<User> byUsername = userRepository.findByUsername(courseFaculty.getId().getFacultyUserName());
+    CourseFacultyId id = CourseFacultyId.builder().code(courseFaculty.getId().getCode()).facultyUserName(courseFaculty.getId().getFacultyUserName()).build();
+    Optional<CourseFaculty> courseFacultyWithCode = courseFacultyRepo.findById(id);
+    if (courseOptional.isPresent() && byUsername.isPresent() && isUserFaculty(byUsername.get()) && !courseFacultyWithCode.isPresent()) {
       courseFaculty.setCreated(new Date(System.currentTimeMillis()));
       courseFacultyRepo.save(courseFaculty);
-    } else {
+    } else if(courseFacultyWithCode.isPresent()) {
       throw new CourseFacultyCollectionException(
               CourseFacultyCollectionException.CourseFacultyAlreadyExist());
+    } else{
+      throw new CourseFacultyCollectionException(
+              CourseFacultyCollectionException.NotFoundException(courseFaculty.getId().getCode(),courseFaculty.getId().getFacultyUserName()));
     }
 
 }
@@ -62,7 +67,7 @@ public class CourseFacultyServiceImpl implements CourseFacultyService {
   public CourseFaculty getSingleCourseFaculty(String code, String faculty)
       throws CourseFacultyCollectionException {
     return courseFacultyRepo
-        .findById(CourseFacultyId.builder().code(code).facultyId(faculty).build())
+        .findById(CourseFacultyId.builder().code(code).facultyUserName(faculty).build())
         .orElseThrow(() -> new CourseFacultyCollectionException(
             CourseFacultyCollectionException.NotFoundException(code, faculty)));
   }
@@ -89,7 +94,7 @@ public class CourseFacultyServiceImpl implements CourseFacultyService {
   @Override
   public void deleteCourseFaculty(String code, String facultyId)
       throws CourseFacultyCollectionException {
-    CourseFacultyId id = CourseFacultyId.builder().code(code).facultyId(facultyId).build();
+    CourseFacultyId id = CourseFacultyId.builder().code(code).facultyUserName(facultyId).build();
     Optional<CourseFaculty> courseFacultyWithCode = courseFacultyRepo.findById(id);
 
     if (courseFacultyWithCode.isPresent()) {
