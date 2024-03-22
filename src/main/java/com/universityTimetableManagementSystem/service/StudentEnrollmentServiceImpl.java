@@ -33,17 +33,25 @@ public class StudentEnrollmentServiceImpl implements StudentEnrollmentService {
     public void createStudentEnrollment(StudentEnrollment studentEnrollment) throws ConstraintViolationException, StudentEnrollmentCollectionException {
         Optional<Course> courseOptional = courseRepo.findById(studentEnrollment.getId().getCode());
         Optional<User> byUsername = userRepository.findByUsername(studentEnrollment.getId().getStudentUserName());
-        StudentEnrollmentId id = StudentEnrollmentId.builder().code(studentEnrollment.getId().getCode()).studentUserName(studentEnrollment.getId().getStudentUserName()).build();
+        StudentEnrollmentId id = StudentEnrollmentId.builder().code(studentEnrollment.getId().getCode()).studentUserName(studentEnrollment.getId().getStudentUserName()).studentPeriod(studentEnrollment.getId().getStudentPeriod()).build();
         Optional<StudentEnrollment> studentEnrollmentWithName = studentEnrollmentRepo.findById(id);
-        if (courseOptional.isPresent() && byUsername.isPresent() && isUserStudent(byUsername.get()) && !studentEnrollmentWithName.isPresent()) {
-            studentEnrollment.setCreated(new Date(System.currentTimeMillis()));
-            studentEnrollmentRepo.save(studentEnrollment);
-        } else if(studentEnrollmentWithName.isPresent()) {
+        String currentCourse = studentEnrollment.getId().getCode();
+        String currentStudent = studentEnrollment.getId().getStudentUserName();
+        String currentPeriod = studentEnrollment.getId().getStudentPeriod();
+        if(currentCourse!=null && currentStudent!=null && currentPeriod!=null) {
+            if (courseOptional.isPresent() && byUsername.isPresent() && isUserStudent(byUsername.get()) && !studentEnrollmentWithName.isPresent()) {
+                studentEnrollment.setCreated(new Date(System.currentTimeMillis()));
+                studentEnrollmentRepo.save(studentEnrollment);
+            } else if (studentEnrollmentWithName.isPresent()) {
+                throw new StudentEnrollmentCollectionException(
+                        StudentEnrollmentCollectionException.StudentAlreadyExist());
+            } else {
+                throw new StudentEnrollmentCollectionException(
+                        StudentEnrollmentCollectionException.NotFoundException(currentCourse, currentStudent, currentPeriod));
+            }
+        }else {
             throw new StudentEnrollmentCollectionException(
-                    StudentEnrollmentCollectionException.StudentAlreadyExist());
-        } else{
-            throw new StudentEnrollmentCollectionException(
-                    StudentEnrollmentCollectionException.NotFoundException(studentEnrollment.getId().getCode(),studentEnrollment.getId().getStudentUserName()));
+                    StudentEnrollmentCollectionException.MissingData());
         }
 
     }
@@ -61,23 +69,25 @@ public class StudentEnrollmentServiceImpl implements StudentEnrollmentService {
     }
 
     @Override
-    public StudentEnrollment getSingleStudentEnrollment(String code, String student) throws StudentEnrollmentCollectionException {
+    public StudentEnrollment getSingleStudentEnrollment(String code, String student, String studentPeriod) throws StudentEnrollmentCollectionException {
         return studentEnrollmentRepo
-                .findById(StudentEnrollmentId.builder().code(code).studentUserName(student).build())
+                .findById(StudentEnrollmentId.builder().code(code).studentUserName(student).studentPeriod(studentPeriod).build())
                 .orElseThrow(() -> new StudentEnrollmentCollectionException(
-                        StudentEnrollmentCollectionException.NotFoundException(code, student)));
+                        StudentEnrollmentCollectionException.NotFoundException(code, student, studentPeriod)));
     }
 
     @Override
-    public void deleteStudentEnrollment(String code, String student) throws StudentEnrollmentCollectionException {
-        StudentEnrollmentId id = StudentEnrollmentId.builder().code(code).studentUserName(student).build();
+    public void deleteStudentEnrollment(String code, String student, String studentPeriod) throws StudentEnrollmentCollectionException {
+        StudentEnrollmentId id = StudentEnrollmentId.builder().code(code).studentUserName(student).studentPeriod(studentPeriod).build();
         Optional<StudentEnrollment> studentEnrollmentWithName = studentEnrollmentRepo.findById(id);
 
         if (studentEnrollmentWithName.isPresent()) {
             studentEnrollmentRepo.deleteById(id);
         } else {
             throw new StudentEnrollmentCollectionException(
-                    StudentEnrollmentCollectionException.NotFoundException(code, student));
+                    StudentEnrollmentCollectionException.NotFoundException(code, student,studentPeriod));
         }
     }
+
+
 }

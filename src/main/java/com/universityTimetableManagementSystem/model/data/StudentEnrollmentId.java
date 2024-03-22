@@ -18,4 +18,7 @@ public class StudentEnrollmentId {
 
     @NotNull(message="Student cannot be null")
     private String studentUserName;
+
+    @NotNull(message="Student period cannot be null")
+    private String studentPeriod;
 }

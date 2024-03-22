@@ -13,10 +13,10 @@ public interface StudentEnrollmentService {
 
     List<StudentEnrollment> getAllStudentEnrollment();
 
-    StudentEnrollment getSingleStudentEnrollment(String code, String student) throws StudentEnrollmentCollectionException;
+    StudentEnrollment getSingleStudentEnrollment(String code, String student, String studentPeriod) throws StudentEnrollmentCollectionException;
 
 
-    void deleteStudentEnrollment(String code, String student) throws StudentEnrollmentCollectionException;
+    void deleteStudentEnrollment(String code, String student, String studentPeriod) throws StudentEnrollmentCollectionException;
 
 }
 

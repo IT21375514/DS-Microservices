@@ -51,23 +51,23 @@ public class StudentEnrollmentController {
         }
     }
 
-    @GetMapping("/{code}/{student}")
+    @GetMapping("/{code}/{student}/{period}")
     @PreAuthorize("hasRole('FACULTY')")
     public ResponseEntity<?> getStudentEnrollment(@PathVariable("code") String code,
-                                             @PathVariable("student") String student)
+                                             @PathVariable("student") String student,@PathVariable("period") String period)
             throws StudentEnrollmentCollectionException {
-        return new ResponseEntity<>(studentEnrollmentService.getSingleStudentEnrollment(code, student),
+        return new ResponseEntity<>(studentEnrollmentService.getSingleStudentEnrollment(code, student, period),
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/{code}/{student}")
+    @DeleteMapping("/{code}/{student}/{period}")
     @PreAuthorize("hasRole('FACULTY')")
     public ResponseEntity<?> deleteStudentEnrollment(@PathVariable("code") String code,
-                                          @PathVariable("student") String student)
+                                          @PathVariable("student") String student, @PathVariable("period") String period)
             throws StudentEnrollmentCollectionException {
-        studentEnrollmentService.deleteStudentEnrollment(code, student);
+        studentEnrollmentService.deleteStudentEnrollment(code, student, period);
         return ResponseEntity.ok()
-                .body("Successfully Deleted with code " + code + " & student username " + student);
+                .body("Successfully Deleted with code " + code + " & student username " + student+ " of " + period);
     }
 
 }
