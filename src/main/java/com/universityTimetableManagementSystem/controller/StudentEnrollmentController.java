@@ -4,6 +4,7 @@ import com.universityTimetableManagementSystem.exception.CourseFacultyCollection
 import com.universityTimetableManagementSystem.exception.StudentEnrollmentCollectionException;
 import com.universityTimetableManagementSystem.model.data.CourseFaculty;
 import com.universityTimetableManagementSystem.model.data.StudentEnrollment;
+import com.universityTimetableManagementSystem.security.JwtUtils;
 import com.universityTimetableManagementSystem.service.CourseFacultyService;
 import com.universityTimetableManagementSystem.service.StudentEnrollmentService;
 import jakarta.validation.ConstraintViolationException;
@@ -11,13 +12,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tms/studentEnrollment")
@@ -51,6 +46,15 @@ public class StudentEnrollmentController {
         }
     }
 
+    @GetMapping("/{code}/{period}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> getSignedInStudentEnrollmentCourse(@PathVariable("code") String code,
+                                                                @PathVariable("period") String period,
+                                                                @CookieValue(JwtUtils.USERNAME_COOKIE_NAME) String userName)
+            throws StudentEnrollmentCollectionException {
+        return new ResponseEntity<>(studentEnrollmentService.getSingleStudentEnrollment(code, userName, period),
+                HttpStatus.OK);
+    }
     @GetMapping("/{code}/{student}/{period}")
     @PreAuthorize("hasRole('FACULTY')")
     public ResponseEntity<?> getStudentEnrollment(@PathVariable("code") String code,

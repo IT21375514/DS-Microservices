@@ -14,8 +14,10 @@
         @Query("{'_id.code':?0}")
         Optional<StudentEnrollment> findByCode(String code);
 
-        @Query("{'_id.studentId':?0}")
+        @Query("{'_id.studentUserName':?0}")
         Optional <StudentEnrollment> findByStudentId(String studentId);
+
+
 
         @Query("{'_id.studentPeriod':?0}")
         Optional <StudentEnrollment> findByStudentPeriod(String studentPeriod);

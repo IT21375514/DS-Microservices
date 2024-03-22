@@ -62,7 +62,15 @@ public class AuthController {
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).build();
+    ResponseCookie userNameCookie = jwtUtils.generateUsernameCookie(userDetails.getUsername());
+
+    return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+            .header(HttpHeaders.SET_COOKIE, userNameCookie.toString())
+            .build();
+
+
+//    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).build();
   }
 
   @PostMapping("/signup")

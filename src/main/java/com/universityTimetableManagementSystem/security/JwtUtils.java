@@ -26,18 +26,29 @@ public class JwtUtils {
   private final int jwtExpirationMs;
 
 
-  private final String jwtCookie;
+//  private final String jwtCookie;
+
+
+  public static final String JWT_COOKIE_NAME = "UniversityTimetableManagementSystem";
+
+  public static final String USERNAME_COOKIE_NAME = "TMSUserName";
 
   public JwtUtils( @Value("${tms.jwt.secret}") String jwtSecret,
-                   @Value("${tms.jwt.expirationMs}") int jwtExpirationMs,
-                   @Value("${tms.jwt.cookieName}") String jwtCookie) {
+                   @Value("${tms.jwt.expirationMs}") int jwtExpirationMs) {
     this.verifyKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     this.jwtExpirationMs = jwtExpirationMs;
-    this.jwtCookie = jwtCookie;
   }
 
+//  public JwtUtils( @Value("${tms.jwt.secret}") String jwtSecret,
+//                   @Value("${tms.jwt.expirationMs}") int jwtExpirationMs,
+//                   @Value("${tms.jwt.cookieName}") String jwtCookie) {
+//    this.verifyKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+//    this.jwtExpirationMs = jwtExpirationMs;
+//    this.jwtCookie = jwtCookie;
+//  }
+
   public String getJwtFromCookies(HttpServletRequest request) {
-    Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+    Cookie cookie = WebUtils.getCookie(request, JWT_COOKIE_NAME);
     if (cookie != null) {
       return cookie.getValue();
     } else {
@@ -47,7 +58,7 @@ public class JwtUtils {
 
   public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
     String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-    return ResponseCookie.from(jwtCookie, jwt)
+    return ResponseCookie.from(JWT_COOKIE_NAME, jwt)
         .path(BASE_PATH)
         .maxAge(MAX_AGE_DAY_IN_SECONDS)
         .httpOnly(true)
@@ -79,4 +90,13 @@ public class JwtUtils {
         .signWith(verifyKey)
         .compact();
   }
+
+  public ResponseCookie generateUsernameCookie(String username) {
+    return ResponseCookie.from(USERNAME_COOKIE_NAME, username)
+            .path(BASE_PATH)
+            .maxAge(MAX_AGE_DAY_IN_SECONDS)
+            .httpOnly(true)
+            .build();
+  }
+
 }
