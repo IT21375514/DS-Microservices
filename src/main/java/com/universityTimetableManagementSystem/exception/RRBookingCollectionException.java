@@ -34,7 +34,7 @@ public class RRBookingCollectionException extends Exception  {
     }
 
     public static String UpdateFailedFaculty() {
-        return "No access to you";
+        return "No access to user";
     }
 
 }

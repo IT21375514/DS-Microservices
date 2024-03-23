@@ -11,7 +11,7 @@ public class CourseFacultyCollectionException extends Exception {
 	}
 	
 	public static String NotFoundException(String code, String faculty) {
-		return "Course %s and Faculty %s not found".formatted(code, faculty);
+		return "Course %s or Faculty %s not found".formatted(code, faculty);
 	}
 	
 	public static String CourseFacultyAlreadyExist() {

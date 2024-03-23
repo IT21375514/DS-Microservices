@@ -164,4 +164,20 @@ public class RRBookingServiceImpl implements RRBookingService{
                     RRBookingCollectionException.NotFoundException(id, date, startTime, endTime));
         }
     }
+
+    @Override
+    public void deleteRRBookingByTimetable(String timeTableReference) throws RRBookingCollectionException {
+
+        List<RRBooking> rrBookingList = rrBookingRepo.findByTimeTableReference(timeTableReference);
+
+        for (RRBooking rrBooking : rrBookingList) {
+            // Delete each RRBooking object
+            try {
+                rrBookingRepo.deleteById(rrBooking.getRrBookingId());
+            } catch (Exception e) {
+                // Handle deletion failure if needed
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -64,6 +64,14 @@ public class StudentEnrollmentController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/mytimetable")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> getStudentEnrollmentTimetable(@CookieValue(JwtUtils.USERNAME_COOKIE_NAME) String userName)
+            throws StudentEnrollmentCollectionException {
+        return new ResponseEntity<>(studentEnrollmentService.getCurrentStudentAllEnrollment(userName),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{code}/{student}/{period}")
     @PreAuthorize("hasRole('FACULTY')")
     public ResponseEntity<?> deleteStudentEnrollment(@PathVariable("code") String code,

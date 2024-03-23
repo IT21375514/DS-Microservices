@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -31,13 +32,13 @@ public class Timetable {
     private String faculty;
 
     @NotNull(message="Class Location cannot be null")
-    private String classLocation;
+    private String classRoomResource;
 
     @NotNull(message="Start date cannot be null")
-    private String courseStartDate;
+    private Date courseStartDate;
 
     @NotNull(message="Course duration cannot be null")
-    private String courseDuration;
+    private int courseDuration;
 
     @NotNull(message="Start Time cannot be null")
     private LocalTime startTime;
@@ -46,7 +47,7 @@ public class Timetable {
     private LocalTime endTime;
 
     @NotNull(message="Batch cannot be null")
-    private LocalTime batch;
+    private String batch;
 
     private LocalDateTime updated;
 

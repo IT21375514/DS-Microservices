@@ -26,6 +26,9 @@ public interface RRBookingRepo extends MongoRepository<RRBooking, RRBookingId> {
     @Query("{'_id.startTime':?0}")
     Optional <RRBooking> findByStartTime(LocalTime startTime);
 
+    @Query("{'timeTableReference':?0}")
+    List<RRBooking> findByTimeTableReference(String timeTableReference);
+
     @Query("{'_id.endTime':?0}")
     Optional <RRBooking> findByEndTime(LocalTime endTime);
 }

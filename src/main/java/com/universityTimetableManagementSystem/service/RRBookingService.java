@@ -19,4 +19,6 @@ public interface RRBookingService {
 
     void deleteRRBooking(String id, Date date, LocalTime startTime, LocalTime endTime, String userName) throws RRBookingCollectionException;
 
+    void deleteRRBookingByTimetable(String timeTableReference) throws RRBookingCollectionException;
+
 }
