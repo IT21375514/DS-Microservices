@@ -51,8 +51,7 @@ The API endpoint documentation is provided in the Postman collection file Univer
 **Integration Tests**
 1.	Ensure Docker is installed and running on your system.
 2.	Navigate to the project directory.
-3.	Start MongoDB Docker container
-4.	Run integration tests
+3.	Run integration tests
    
 **Environment Setup for Testing**
 
