@@ -211,9 +211,9 @@ public class TimetableServiceImpl implements TimetableService {
             calendar.setTime(timetable.getCourseStartDate());
 
             List<RRBooking> rrBookingList1 = rrBookingRepo.findByTimeTableReference(id);
+            rrBookingService.deleteRRBookingByTimetable(id);
 
-
-            for (int i = 0; i < timetableWithData.get().getCourseDuration(); i++) {
+            for (int i = 0; i < timetable.getCourseDuration(); i++) {
                 // Calculate the new date by adding i weeks to the start date
                 calendar.add(Calendar.WEEK_OF_YEAR, i);
                 Date bookingDate = calendar.getTime();
@@ -223,7 +223,7 @@ public class TimetableServiceImpl implements TimetableService {
 
                 // Set RRBookingId
                 RRBookingId rrBookingId = new RRBookingId();
-                rrBookingId.setRrId(timetableWithData.get().getClassRoomResource());
+                rrBookingId.setRrId(timetable.getClassRoomResource());
                 rrBookingId.setDate(bookingDate);
                 rrBookingId.setStartTime(timetable.getStartTime());
                 rrBookingId.setEndTime(timetable.getEndTime());
@@ -252,6 +252,13 @@ public class TimetableServiceImpl implements TimetableService {
                 timetableUpdate.setClassRoomResource(timetable.getClassRoomResource());
                 timetableUpdate.setStartTime(timetable.getStartTime());
                 timetableUpdate.setEndTime(timetable.getEndTime());
+                timetableUpdate.setUpdated(LocalDateTime.now());
+                timetableUpdate.setFaculty(userName);
+                timetableUpdate.setBatch(timetable.getBatch());
+                timetableUpdate.setCode(timetable.getCode());
+                timetableUpdate.setCourseDuration(timetable.getCourseDuration());
+                timetableUpdate.setCourseStartDate(timetable.getCourseStartDate());
+                timetableRepo.save(timetableUpdate);
             }
         } else if (timetableWithData.isEmpty()) {
             throw new TimetableCollectionException(

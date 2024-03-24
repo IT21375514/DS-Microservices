@@ -73,7 +73,7 @@ public class TimetableController {
     )  throws RRBookingCollectionException, ParseException, TimetableCollectionException {
         try {
             timetableService.updateTimetable(id, timetable, userName);
-            return new ResponseEntity<>(timetable, HttpStatus.OK);
+            return new ResponseEntity<>("Update Timetable with code " + id, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (RRBookingCollectionException e) {
