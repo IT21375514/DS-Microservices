@@ -6,13 +6,14 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Date;
-import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Slf4j
 @Component
@@ -98,5 +99,7 @@ public class JwtUtils {
             .httpOnly(true)
             .build();
   }
+
+
 
 }

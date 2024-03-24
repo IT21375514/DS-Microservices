@@ -11,9 +11,6 @@ import com.universityTimetableManagementSystem.repository.UserRepository;
 import com.universityTimetableManagementSystem.security.JwtUtils;
 import com.universityTimetableManagementSystem.service.UserDetailsImpl;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -27,6 +24,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tms/auth")
@@ -105,6 +106,8 @@ public class AuthController {
         .ok()
         .build();
   }
+
+
 
   private static ResponseEntity<ErrorDetails> signupValidationFailResponse(
       String usernameAlreadyExists) {

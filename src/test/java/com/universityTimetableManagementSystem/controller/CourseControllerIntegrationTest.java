@@ -1,22 +1,15 @@
 package com.universityTimetableManagementSystem.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.universityTimetableManagementSystem.UniversityTimetableManagementSystemApplication;
 import com.universityTimetableManagementSystem.config.MongoDBTestContainerConfig;
 import com.universityTimetableManagementSystem.config.TestWebSecurityConfig;
+import com.universityTimetableManagementSystem.model.ERole;
 import com.universityTimetableManagementSystem.model.data.*;
-
-import java.util.Collections;
-import java.util.List;
-
 import com.universityTimetableManagementSystem.repository.UserRepository;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,9 +19,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static com.universityTimetableManagementSystem.model.ERole.ROLE_FACULTY;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.universityTimetableManagementSystem.service.CourseFacultyServiceImplTest.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -39,7 +35,11 @@ class CourseControllerIntegrationTest {
   public static final String COURSE_CODE = "CODE";
   public static final String COURSE_NAME = "Name";
   public static final String UPDATED_NAME = "DIFFERENT_NAME";
-  @LocalServerPort
+  public static final String USER_NAME = "Test User";
+
+    User facultyUser = getTestUser(USER_NAME, "rgqwrkjkhjhsfaduihulyuweuqwl","asrgewyjrkdsfasdfasjau");
+
+    @LocalServerPort
   private int port;
   RestClient client;
     @Autowired
@@ -180,18 +180,16 @@ class CourseControllerIntegrationTest {
     @Test
     @Order(9)
     void testCreateCourseFaculty() {
-        // Prepare test data
-        CourseFaculty courseFaculty = new CourseFaculty();
-        // Set course faculty details
-        // For example:
-        courseFaculty.setId(new CourseFacultyId("CODE", "FACULTY_USERNAME"));
-        // Set other required properties of courseFaculty object
 
-        // Call the endpoint to create course faculty
+        CourseFaculty courseFaculty = new CourseFaculty();
+
+        courseFaculty.setId(new CourseFacultyId(CODE, USER_NAME));
+
+
         client.post()
                 .uri("/tms/course-faculty")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(courseFaculty)
+                .body(getTestCourseFaculty(CODE,USER_NAME))
                 .exchange((clientRequest, clientResponse) -> {
                     Assertions.assertNotNull(clientResponse);
                     Assertions.assertEquals(HttpStatusCode.valueOf(200), clientResponse.getStatusCode());
@@ -213,5 +211,32 @@ class CourseControllerIntegrationTest {
         Assertions.assertNotNull(courseFacultyList);
         // Add more assertions as needed
     }
+    public static User getTestUser(String username, String email, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRoles(getTestRoles()); // Set test roles
+        return user;
+    }
 
+    private static Set<Role> getTestRoles() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(getTestRole(ERole.ROLE_ADMIN));
+        roles.add(getTestRole(ERole.ROLE_FACULTY));
+        roles.add(getTestRole(ERole.ROLE_STUDENT));
+        return roles;
+    }
+    private static CourseFaculty getTestCourseFaculty() {
+        return getTestCourseFaculty(CODE, USER_NAME);
+    }
+
+    private static CourseFaculty getTestCourseFaculty(String code, String name) {
+        CourseFaculty courseFaculty = new CourseFaculty();
+        CourseFacultyId courseFacultyId = new CourseFacultyId();
+        courseFacultyId.setCode(code);
+        courseFacultyId.setFacultyUserName(name);
+        courseFaculty.setId(courseFacultyId);
+        return courseFaculty;
+    }
 }

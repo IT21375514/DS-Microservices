@@ -20,6 +20,10 @@
 
         @Query("{'_id.studentUserName':?0}")
         List<StudentEnrollment> findByCurrentUsereId(String studentId);
+
+        @Query("{'_id.code':?0,'_id.studentPeriod':?1}")
+        List<StudentEnrollment> findByCodeStudents(String code, String studentPeriod);
+
         @Query("{'_id.code':?0, '_id.studentUserName': ?1}")
         Optional <StudentEnrollment> findByStudentIdCourse(String code, String studentUserName);
 

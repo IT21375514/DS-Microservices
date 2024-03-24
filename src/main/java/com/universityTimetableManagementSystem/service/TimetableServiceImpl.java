@@ -10,10 +10,8 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -24,15 +22,20 @@ public class TimetableServiceImpl implements TimetableService {
     private final RRBookingRepo rrBookingRepo;
     private final TimetableRepo timetableRepo;
     private final RRBookingService rrBookingService;
+    private final EmailService emailService;
     private final CourseFacultyService courseFacultyService;
+    private final UserRepository userRepository;
 
-    public TimetableServiceImpl(CourseRepo courseRepo, StudentEnrollmentRepo studentEnrollmentRepo, RRBookingRepo rrBookingRepo, TimetableRepo timetableRepo, RRBookingService rrBookingService, CourseFacultyService courseFacultyService) {
+
+    public TimetableServiceImpl(CourseRepo courseRepo, StudentEnrollmentRepo studentEnrollmentRepo, RRBookingRepo rrBookingRepo, TimetableRepo timetableRepo, RRBookingService rrBookingService, EmailService emailService, CourseFacultyService courseFacultyService, UserRepository userRepository) {
         this.courseRepo = courseRepo;
         this.studentEnrollmentRepo = studentEnrollmentRepo;
         this.rrBookingRepo = rrBookingRepo;
         this.timetableRepo = timetableRepo;
         this.rrBookingService = rrBookingService;
+        this.emailService = emailService;
         this.courseFacultyService = courseFacultyService;
+        this.userRepository = userRepository;
     }
     @Override
     public void createTable(Timetable timetable, String userName) throws ConstraintViolationException, TimetableCollectionException, RRBookingCollectionException, CourseFacultyCollectionException, CourseCollectionException {
@@ -90,6 +93,23 @@ public class TimetableServiceImpl implements TimetableService {
                 rrBookingService.deleteRRBookingByTimetable(timetableId);
                 deleteTimetable(timetableId, userName);
                 throw new RRBookingCollectionException("Time slots not available for the classroom");
+            }else{
+                List<StudentEnrollment> studentEnrollment = studentEnrollmentRepo.findByCodeStudents(code,batch);
+                if (studentEnrollment.isEmpty()) {
+                    System.out.println("No student enrollment data found for the provided code and batch.");
+                } else {
+                    for (StudentEnrollment enrollment : studentEnrollment) {
+                        Optional<User> userIn = userRepository.findByUsername(enrollment.getId().getStudentUserName());
+                        String email = userIn.map(User::getEmail).orElse(null);
+                        EmailData emailData = new EmailData();
+                        emailData.setSendTo(email);
+                        emailData.setSubject("Timetable Update");
+                        emailData.setBody("Hi Student, There is a timetable update for " + code);
+                        emailService.sendTextEmail(emailData);
+                    }
+                }
+
+
             }
         } else if (courseFaculty != null) {
             throw new CourseFacultyCollectionException(

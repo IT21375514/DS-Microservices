@@ -1,24 +1,12 @@
 package com.universityTimetableManagementSystem.service;
 
-import static com.universityTimetableManagementSystem.model.ERole.ROLE_ADMIN;
-import static com.universityTimetableManagementSystem.service.CourseServiceImplTest.CODE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import com.universityTimetableManagementSystem.controller.AuthController;
-import com.universityTimetableManagementSystem.exception.CourseCollectionException;
 import com.universityTimetableManagementSystem.exception.CourseFacultyCollectionException;
 import com.universityTimetableManagementSystem.model.ERole;
 import com.universityTimetableManagementSystem.model.data.*;
 import com.universityTimetableManagementSystem.model.security.SignupRequest;
 import com.universityTimetableManagementSystem.repository.CourseFacultyRepo;
 import com.universityTimetableManagementSystem.repository.CourseRepo;
-
-import java.util.*;
-
 import com.universityTimetableManagementSystem.repository.RoleRepository;
 import com.universityTimetableManagementSystem.repository.UserRepository;
 import com.universityTimetableManagementSystem.security.JwtUtils;
@@ -26,14 +14,22 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-class CourseFacultyServiceImplTest {
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+public class CourseFacultyServiceImplTest {
 
     private CourseRepo courseRepo;
     public static final String CODE = "code";
@@ -74,33 +70,28 @@ class CourseFacultyServiceImplTest {
         Set<Role> roles = new HashSet<>();
         roles.add(getTestRole(ERole.ROLE_FACULTY));
         facultyUser.setRoles(roles);
-
-        // Define the behavior of userRepository mock
         when(userRepository.findByUsername(eq(FACULTY))).thenReturn(Optional.of(facultyUser));
 
-        List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
-        updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_FACULTY"));
-        onTest2 = new UserDetailsImpl("65fd97ea50429b0b459b08b213", FACULTY, "facultyTestUser@gmail.com", "rgqwrkjkhjhsfaduihulyuweuqwl", updatedAuthorities);
-        onTest3 = new UserDetailsServiceImpl(userRepository);
         onTest = new CourseFacultyServiceImpl(courseRepo, courseFacultyRepo, userRepository);
     }
 
     @SneakyThrows
     @Test
     void testCreateCourseValid() {
-        Course course = getTestCourse();
-        User user = getTestUser();
-        CourseFaculty courseFaculty = getTestCourseFaculty();
-        onTest1.createCourse(course);
-        Mockito.verify(courseRepo).save(any());
-        onTest.createCourseFaculty(courseFaculty);
+        CourseFaculty course = getTestCourseFaculty();
+        when(userRepository.findByRolesIn(new String[]{"ROLE_ADMIN", "ROLE_USER"}))
+                .thenReturn(Optional.of(getTestUser()));
+        when(userRepository.findByUsername("username"))
+                .thenReturn(Optional.of(getTestUser()));
+        when(courseRepo.findById(any())).thenReturn(Optional.of(getTestCourse()));
+
+        onTest.createCourseFaculty(course);
         Mockito.verify(courseFacultyRepo).save(any());
     }
 
     @Test
     void testGetAllCourseFaculty() {
-        Mockito.when(courseFacultyRepo.findAll()).thenReturn(List.of(getTestCourseFaculty()));
+        when(courseFacultyRepo.findAll()).thenReturn(List.of(getTestCourseFaculty()));
         List<CourseFaculty> allCourseFaculty = onTest.getAllCourseFaculty();
         Assertions.assertNotNull(allCourseFaculty);
         Assertions.assertEquals(1, allCourseFaculty.size());
@@ -109,7 +100,7 @@ class CourseFacultyServiceImplTest {
     @SneakyThrows
     @Test
     void testGetSingleCourseFacultyValid() {
-        Mockito.when(courseFacultyRepo.findById(any())).thenReturn(Optional.of(getTestCourseFaculty()));
+        when(courseFacultyRepo.findById(any())).thenReturn(Optional.of(getTestCourseFaculty()));
         CourseFaculty courseFaculty = onTest.getSingleCourseFaculty(CODE,FACULTY);
         Assertions.assertNotNull(courseFaculty);
         Assertions.assertEquals(CODE, courseFaculty.getId().getCode());
@@ -125,7 +116,7 @@ class CourseFacultyServiceImplTest {
     @SneakyThrows
     @Test
     void testDeleteCourseFacultyValid() {
-        Mockito.when(courseFacultyRepo.findById(any())).thenReturn(Optional.of(getTestCourseFaculty()));
+        when(courseFacultyRepo.findById(any())).thenReturn(Optional.of(getTestCourseFaculty()));
         onTest.deleteCourseFaculty(CODE,FACULTY);
         CourseFacultyId courseId = new CourseFacultyId(CODE,FACULTY);
         Mockito.verify(courseFacultyRepo).deleteById(courseId);
@@ -182,7 +173,7 @@ class CourseFacultyServiceImplTest {
         return roles;
     }
 
-    private static Role getTestRole(ERole role) {
+    public static Role getTestRole(ERole role) {
         Role testRole = new Role();
         testRole.setName(role);
         return testRole;
