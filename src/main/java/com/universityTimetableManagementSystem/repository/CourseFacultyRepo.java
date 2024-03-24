@@ -17,4 +17,7 @@ public interface CourseFacultyRepo extends MongoRepository<CourseFaculty, Course
 
 	@Query("{'_id.facultyId':?0}")
 	Optional <CourseFaculty> findByFacultyId(String facultyId);
+
+	@Query("{'_id.code':?0,'_id.facultyId':?0}")
+	Optional <CourseFaculty> findByFacultyIdCode(String facultyId);
 }

@@ -27,7 +27,7 @@ public class CourseFacultyController {
   }
 
   @GetMapping()
-  @PreAuthorize("hasRole('FACULTY')")
+  @PreAuthorize("hasAnyRole('FACULTY', 'ADMIN')")
   public ResponseEntity<?> getAllTodos() {
     List<CourseFaculty> courseFaculty = courseFacultyService.getAllCourseFaculty();
     return new ResponseEntity<>(courseFaculty,
@@ -36,7 +36,7 @@ public class CourseFacultyController {
 
 
   @PostMapping()
-  @PreAuthorize("hasRole('FACULTY')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> createCourse(@RequestBody CourseFaculty courseFaculty) {
     try {
       courseFacultyService.createCourseFaculty(courseFaculty);
@@ -49,6 +49,7 @@ public class CourseFacultyController {
   }
 
   @GetMapping("/{code}/{faculty}")
+  @PreAuthorize("hasAnyRole('FACULTY', 'ADMIN')")
   public ResponseEntity<?> getSingleCourse(@PathVariable("code") String code,
                                            @PathVariable("faculty") String faculty)
       throws CourseFacultyCollectionException {
@@ -71,7 +72,7 @@ public class CourseFacultyController {
 //	}
 
   @DeleteMapping("/{code}/{facultyCode}")
-  @PreAuthorize("hasRole('FACULTY')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> deleteByCode(@PathVariable("code") String code,
                                         @PathVariable("facultyCode") String facultyCode)
       throws CourseFacultyCollectionException {

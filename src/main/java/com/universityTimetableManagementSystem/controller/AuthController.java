@@ -67,7 +67,7 @@ public class AuthController {
     return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
             .header(HttpHeaders.SET_COOKIE, userNameCookie.toString())
-            .build();
+            .body("Sign in successful");
 
 
 //    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).build();

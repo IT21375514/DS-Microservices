@@ -71,25 +71,6 @@ public class CourseFacultyServiceImpl implements CourseFacultyService {
         .orElseThrow(() -> new CourseFacultyCollectionException(
             CourseFacultyCollectionException.NotFoundException(code, faculty)));
   }
-//
-//	@Override
-//	public void updateCourseFaculty(String id, CourseFaculty courseFaculty) throws CourseFacultyCollectionException {
-//		Optional <CourseFaculty> courseFacultyWithCode = courseFacultyRepo.findByCode(courseFaculty.getCode());
-//		Optional <CourseFaculty> courseFacultyWithSameName = courseFacultyRepo.findByFacultyId(courseFaculty.getFacultyId());
-//		if(courseFacultyWithCode.isPresent()) {
-//			
-//			if(courseFacultyWithCode.isPresent() && courseFacultyWithSameName.isPresent() &&!courseFacultyWithSameName.get().getCode().equals(id)) {
-//				throw new CourseFacultyCollectionException(CourseFacultyCollectionException.CourseFacultyAlreadyExist());
-//			}
-//			
-//			CourseFaculty courseToUpdate = courseFacultyWithCode.get();
-//			courseToUpdate.setFacultyId(courseFaculty.getFacultyId());;
-//			courseFacultyRepo.save(courseToUpdate);
-//		}else {
-//			throw new CourseFacultyCollectionException(CourseFacultyCollectionException.NotFoundException(id));
-//		}
-//		
-//	}
 
   @Override
   public void deleteCourseFaculty(String code, String facultyId)

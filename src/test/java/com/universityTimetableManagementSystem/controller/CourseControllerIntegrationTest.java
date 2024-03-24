@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.universityTimetableManagementSystem.UniversityTimetableManagementSystemApplication;
 import com.universityTimetableManagementSystem.config.MongoDBTestContainerConfig;
 import com.universityTimetableManagementSystem.config.TestWebSecurityConfig;
-import com.universityTimetableManagementSystem.model.data.Course;
+import com.universityTimetableManagementSystem.model.data.*;
+
+import java.util.Collections;
 import java.util.List;
+
+import com.universityTimetableManagementSystem.repository.UserRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +17,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -22,6 +27,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static com.universityTimetableManagementSystem.model.ERole.ROLE_FACULTY;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -35,7 +42,8 @@ class CourseControllerIntegrationTest {
   @LocalServerPort
   private int port;
   RestClient client;
-
+    @Autowired
+    private UserRepository userRepository;
   ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
@@ -151,5 +159,59 @@ class CourseControllerIntegrationTest {
     course.setCredit(3);
     return course;
   }
+
+    @SneakyThrows
+    @Test
+    @Order(8)
+    void testCreateCourse2() {
+        client.post()
+                .uri("/tms/courses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(getTestCourse(COURSE_CODE, COURSE_NAME))
+                .exchange((clientRequest, clientResponse) -> {
+                    Assertions.assertNotNull(clientResponse);
+                    Assertions.assertEquals(HttpStatusCode.valueOf(200), clientResponse.getStatusCode());
+                    return clientResponse;
+                });
+
+    }
+
+
+    @Test
+    @Order(9)
+    void testCreateCourseFaculty() {
+        // Prepare test data
+        CourseFaculty courseFaculty = new CourseFaculty();
+        // Set course faculty details
+        // For example:
+        courseFaculty.setId(new CourseFacultyId("CODE", "FACULTY_USERNAME"));
+        // Set other required properties of courseFaculty object
+
+        // Call the endpoint to create course faculty
+        client.post()
+                .uri("/tms/course-faculty")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(courseFaculty)
+                .exchange((clientRequest, clientResponse) -> {
+                    Assertions.assertNotNull(clientResponse);
+                    Assertions.assertEquals(HttpStatusCode.valueOf(200), clientResponse.getStatusCode());
+                    return clientResponse;
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testGetAllCourseFaculty() {
+        List<CourseFaculty> courseFacultyList = client.get()
+                .uri("/tms/course-faculty")
+                .exchange((clientRequest, clientResponse) -> {
+                    Assertions.assertNotNull(clientResponse);
+                    Assertions.assertEquals(HttpStatusCode.valueOf(200), clientResponse.getStatusCode());
+                    return objectMapper.readValue(clientResponse.getBody(), new TypeReference<>() {});
+                });
+        // Assertions for the returned course faculty list
+        Assertions.assertNotNull(courseFacultyList);
+        // Add more assertions as needed
+    }
 
 }
