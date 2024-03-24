@@ -5,9 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.universityTimetableManagementSystem.UniversityTimetableManagementSystemApplication;
 import com.universityTimetableManagementSystem.config.MongoDBTestContainerConfig;
 import com.universityTimetableManagementSystem.config.TestWebSecurityConfig;
+import com.universityTimetableManagementSystem.exception.CourseCollectionException;
+import com.universityTimetableManagementSystem.exception.CourseFacultyCollectionException;
+import com.universityTimetableManagementSystem.exception.RRBookingCollectionException;
+import com.universityTimetableManagementSystem.exception.TimetableCollectionException;
 import com.universityTimetableManagementSystem.model.ERole;
 import com.universityTimetableManagementSystem.model.data.*;
+import com.universityTimetableManagementSystem.repository.RRBookingRepo;
+import com.universityTimetableManagementSystem.repository.TimetableRepo;
 import com.universityTimetableManagementSystem.repository.UserRepository;
+import com.universityTimetableManagementSystem.service.CourseFacultyService;
+import com.universityTimetableManagementSystem.service.EmailService;
+import com.universityTimetableManagementSystem.service.RRBookingService;
+import com.universityTimetableManagementSystem.service.TimetableServiceImpl;
+import jakarta.validation.ConstraintViolationException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +31,20 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClient;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 
-import static com.universityTimetableManagementSystem.service.CourseFacultyServiceImplTest.*;
+import static com.universityTimetableManagementSystem.service.CourseFacultyServiceImplTest.CODE;
+import static com.universityTimetableManagementSystem.service.CourseFacultyServiceImplTest.getTestRole;
+import static org.junit.Assert.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(classes = { MongoDBTestContainerConfig.class, TestWebSecurityConfig.class, UniversityTimetableManagementSystemApplication.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CourseControllerIntegrationTest {
+class IntegrationTest {
   public static final String COURSE_CODE = "CODE";
   public static final String COURSE_NAME = "Name";
   public static final String UPDATED_NAME = "DIFFERENT_NAME";
@@ -46,6 +59,23 @@ class CourseControllerIntegrationTest {
     private UserRepository userRepository;
   ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    private RRBookingRepo rrBookingRepo;
+
+    @Autowired
+    private TimetableRepo timetableRepo;
+
+    @Autowired
+    private RRBookingService rrBookingService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private CourseFacultyService courseFacultyService;
+
+    @Autowired
+    private TimetableServiceImpl timetableService;
   @BeforeEach
   void clear() {
     client = RestClient.builder().baseUrl("http://localhost:" + port).build();
@@ -238,5 +268,37 @@ class CourseControllerIntegrationTest {
         courseFacultyId.setFacultyUserName(name);
         courseFaculty.setId(courseFacultyId);
         return courseFaculty;
+    }
+
+    @Test
+    void testCreateTable() throws ConstraintViolationException, TimetableCollectionException, RRBookingCollectionException, CourseFacultyCollectionException, CourseCollectionException {
+        // Create a sample timetable
+        Timetable timetable = new Timetable();
+        timetable.setCode(COURSE_CODE);
+        timetable.setClassRoomResource("A101");
+        timetable.setCourseStartDate(new Date());
+        timetable.setCourseDuration(10);
+        timetable.setStartTime(LocalTime.of(9, 0));
+        timetable.setEndTime(LocalTime.of(11, 0));
+        timetable.setBatch("2024");
+        timetable.setFaculty(USER_NAME);
+        timetable.setUpdated(LocalDateTime.now());
+
+        // Save the sample timetable
+        timetableRepo.save(timetable);
+
+        // Call the createTable method of TimetableServiceImpl
+        timetableService.createTable(timetable, "facultyUser");
+
+        // Retrieve the saved timetable from the database
+        Optional<Timetable> savedTimetableOptional = timetableRepo.findById(timetable.getId());
+
+        // Verify that the timetable was saved and created successfully
+        assertNotNull(savedTimetableOptional);
+        assertTrue(savedTimetableOptional.isPresent());
+        Timetable savedTimetable = savedTimetableOptional.get();
+        assertEquals("facultyUser", savedTimetable.getFaculty());
+        assertEquals("CSE101", savedTimetable.getCode());
+        // Add more assertions as needed
     }
 }
