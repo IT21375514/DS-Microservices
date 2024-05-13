@@ -1,0 +1,487 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #000000;
+  text-decoration: inherit;
+  overflow-wrap: break-word;
+}
+a:hover {
+  text-decoration: underline;;
+
+}
+
+body {
+  margin: 0;
+  /* display: flex; */
+  color: #000000;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-size: cover;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.5em;
+  line-height: 1.1;
+}
+
+button {
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.ImgContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.bgImage{
+ width: 100%;
+ height: 100%;
+ flex: 1;
+ object-fit: cover;
+}
+
+.bg-body-tertiary{
+  padding: 1.4em 10%;
+  background-color: rgba(255, 170, 0, 0.8) !important; 
+  /* background-color: rgba(255, 255, 255, 0.349)!important; */
+}
+
+#navbarScroll{
+  justify-content: end;
+}
+
+.navbar-collapse {
+  flex-grow: 0!important;
+}
+
+.navbar-toggler {
+  padding: 0!important;
+}
+
+@media (min-width: 992px) {
+  .sub-nav .nav-link {
+    padding: 0.2rem 2rem !important;
+  }
+}
+
+.bg-body-tertiary .navbar-brand,
+.bg-body-tertiary .nav-link,
+.bg-body-tertiary .nav-dropdown-toggle,
+.bg-body-tertiary .nav-dropdown-item, .dropdown-item {
+  color: #ffffff !important;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  /* color: #000000!important; */
+  opacity: 0.7;
+  text-decoration: none!important;
+}
+
+.nav-link.active {
+  /* color: #000000!important; */
+  opacity: 0.7;
+  text-decoration: none!important;
+
+}
+
+
+
+
+.dropdown-menu.show {
+  background-color: rgba(255, 255, 255, 0.349)!important;
+  color: #ffffff!important;
+  text-transform: uppercase;
+  font-weight: 600;
+
+}
+
+.dropdown-item:hover {
+  color: black !important;
+}
+
+.navbar>.container-fluid{
+  padding: 0;  
+}
+
+.navbar-toggler-icon {
+  background-image: url('../public/img/burger-menu-white.png');
+}
+
+.btn {
+  border-radius: 0!important;
+  border: 2px solid #ffaa00;
+  font-weight: 600;
+  color: #000000;
+  background-color: #ffffff;
+}
+p{
+  overflow-wrap: break-word;
+}
+.btn:hover {
+  color: #ffffff!important;
+  border: 2px solid #ffaa00;
+  background-color: #ffaa00!important;
+  text-decoration: none!important;
+}
+
+button.navbar-toggler.collapsed {
+  padding: 0;
+}
+
+.card{
+  background-color: transparent!important;
+  border:2px solid #ffffff;
+  color: #ffffff;
+}
+
+.api-button {
+  padding: 0.2em 1em;
+  background-color: transparent;
+  border: 1px solid #ffaa00;
+  color: #000000;
+}
+
+.api-button:hover {
+  color: #ffffff!important;
+  background-color: #ffaa00;
+  text-decoration: none!important;
+}
+
+
+.in-content{
+  padding-top: 12em;
+  padding-bottom: 4em;
+  max-width: 100%;
+  min-height: 80vh;
+  width: 80%;
+  margin: auto;
+}
+
+/*App*/
+.App .content{
+  background-color: #04051e;
+  min-height: 100vh; 
+}
+
+.App {
+  min-height: 100vh; 
+}
+
+
+/* Login Page */
+#login .nav-item button{
+  color:#000000!important;
+  font-weight: bold;
+}
+
+#login .nav-link.active{
+  color:#ffffff!important;
+  background-color: #ffaa00!important;
+  font-weight: bold;
+}
+
+.nav-tabs{
+  border-bottom: 2px solid #ffaa00;
+}
+
+#login .form-control {
+  background-color: transparent!important;
+  color: #000000!important;
+  border: 2px solid #000000;
+}
+
+#login input::placeholder {
+  color: #000000; /* Change placeholder color to gray */
+}
+
+.modal-content {
+  background-color: #ffffff;
+  border: 2px solid #ffaa00;
+  padding: 2em 2em;
+}
+
+.modal-header {
+  text-align: center;
+  border-bottom: none;
+}
+
+.modal-footer {
+  text-align: center;
+  border-top: none;
+}
+
+.modal {
+  padding: 0;
+}
+
+.fade.modal.show {
+  align-content: center;
+}
+
+.modal-content {
+  width: auto;
+  margin: 0 2em;
+}
+
+#login{
+  padding:3em 0;
+  min-height: 100vh; 
+  background-color: #fff;
+  /* background: url('../public/img/bg.gif');  */
+  background-size: cover;
+  max-width:100%;
+}
+
+#login-div{
+  max-width: 400px;
+  width: 80%;
+}
+
+#login .ImgContainer{
+  height: 100%;
+  width: 100%; 
+  max-height: 600px; 
+  overflow: hidden;
+}
+
+
+#login .ImgContainer img{
+  object-fit: contain;
+  width: 100%; 
+  height: 100%;
+}
+
+#uncontrolled-tab-example{
+  justify-content: center;
+}
+
+.form-check-input:checked {
+  background-color: #ffaa00;
+  border-color: #ffaa00;
+}
+
+/*Nav bar*/
+#head-nav-bar .navbar-brand {
+  margin-right: 0;
+}
+
+#head-nav-bar .navbar-brand img {
+  height: 50px;
+}
+
+#account-offcanvas{
+  background-color: #ffaa00;
+}
+
+#account-offcanvas .offcanvas-body .text-center img {
+  width: 100px;
+  height: 100px;
+}
+
+#account-offcanvas .btn-logout {
+  margin: 2em 3em;
+}
+
+/*Off Canvas*/
+.offcanvas{
+  color: #ffffff;
+}
+
+.offcanvas-header{
+  margin-top: 0.2em;
+  align-items: baseline;
+}
+
+.offcanvas-title{
+  width: 100%;
+  text-align: center;
+}
+
+.btn-close {
+  --bs-btn-close-bg: url('data:image/svg+xml,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23fff"%3e%3cpath d="M.25 0A.25.25 0 0 1 .58.22L8 7.585 15.42.22a.25.25 0 0 1 .354.353L8.707 8l7.067 7.426a.25.25 0 0 1-.354.354L8 8.707l-7.07 7.073a.25.25 0 0 1-.354-.354L7.293 8 .22.58A.25.25 0 0 1 .25 0z" stroke-linecap="round" stroke-width="4" stroke="%23ffffff" /%3e%3c/svg%3e');
+}
+
+/*Footer Bar*/
+
+#my-footer {
+  width: 100%;
+  background-color: #ffaa00;
+}
+
+#my-footer .row {
+  max-width: 100%;
+  width: 80%;
+  margin: 20px auto;
+}
+
+#my-footer-first img {
+  height: 50px;
+  margin-bottom: 30px;
+}
+
+#my-footer-third img {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.5rem;
+}
+
+/*Payment Page*/
+
+#payment-container{
+  max-width: 700px!important;
+  border: 2px solid #ffaa00;
+  padding: 2em 2em;
+  margin: auto;
+}
+
+/*Home*/
+
+#plus-button:hover{
+  color: #ffffff!important;
+  background-color: #000000!important;
+  border: 2px solid #000000;
+  border-radius: 50px !important;
+}
+
+#plus-button{
+  border-radius: 50px !important;
+  min-width: 10em;
+}
+
+#plus-button span{
+  font-weight: 600!important;
+  font-size: 1.2em ;
+}
+
+.card-body{
+  color: #000000;
+  min-height: 200px;
+}
+
+.card {
+  background-color: transparent !important;
+  border: 2px solid rgba(0, 0, 0, 0.175);
+  color: #ffffff;
+}
+
+#enrolled span{
+  padding-right: 1em;
+  color: #ffaa00!important;
+}
+/* add-course-content */
+
+#add-course-content{
+  border: 2px solid #ffaa00;
+  margin: auto;
+  padding: 2em 3em;
+}
+
+/* Accept-course-content */
+
+.accept{
+  border: 2px solid green;
+}
+.accept:hover{
+  background-color: green!important;
+  border: 2px solid green;
+}
+
+.reject{
+  border: 2px solid red;
+}
+.reject:hover{
+  background-color: red!important;
+  border: 2px solid red;
+}
+
+/*course-content*/
+.progress-bar {
+  background-color: #ffaa00;
+}
+
+/*Course Content Preview*/
+
+#enroll-button:hover{
+  color: #ffffff!important;
+  background-color: #000000!important;
+  border: 2px solid #000000;
+  border-radius: 50px !important;
+}
+
+#enroll-button{
+  font-weight: 600!important;
+  font-size: 1.2em ;
+  min-width: 10em;
+  border-radius: 50px !important;
+}
+
+/*Admin Home*/
+
+#home-admin .nav-tabs .nav-link{
+  color: #000000;
+  border: 1px solid #ffaa00;
+}
+
+#home-admin .nav-tabs .nav-link:hover{
+  text-decoration: none!important;
+}
+
+#home-admin .nav-tabs .nav-link.active{
+  color: #ffffff;
+  background-color: #ffaa00;
+  text-decoration: none!important;
+}
+
+.navbar .nav-link.active {
+  color: black;
+}
+
+/*My-Courses*/
+#my-user-courses .nav-tabs .nav-link{
+  color: #000000;
+  border: 1px solid #ffaa00;
+}
+
+#my-user-courses .nav-tabs .nav-link:hover{
+  text-decoration: none!important;
+}
+
+#my-user-courses .nav-tabs .nav-link.active{
+  color: #ffffff;
+  background-color: #ffaa00;
+  text-decoration: none!important;
+}
