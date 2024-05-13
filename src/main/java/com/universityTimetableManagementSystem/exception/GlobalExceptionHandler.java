@@ -13,11 +13,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler({ CourseFacultyCollectionException.class })
-  public ResponseEntity<Object> handleApiError(final CourseFacultyCollectionException ex, final WebRequest request) {
-    log.error("Failed with error: ", ex);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-  }
+//  @ResponseStatus(HttpStatus.NOT_FOUND)
+//  @ExceptionHandler({ CourseFacultyCollectionException.class })
+//  public ResponseEntity<Object> handleApiError(final CourseFacultyCollectionException ex, final WebRequest request) {
+//    log.error("Failed with error: ", ex);
+//    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//  }
 
 }
