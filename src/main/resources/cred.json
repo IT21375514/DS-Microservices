@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "causal-medium-400416",
+  "private_key_id": "dea807755705b076f06f56dcec66160197793a61",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtnedMsoSAlzY6\nylRY9VWuH8YX8vrXvSzeoKgaUJdxntFd5jY30mg8fceremPaczc/RdQnuPKyFjZN\nSqydav97vNfQI7Gyyu4SsEETp1pdPz60cTem2y84oV3xAG01DvBDVC5nIBNUbUKI\nRYcpB8EizMr0/iGPo4SK0+jr2XXE9nJ+Wtuej5SUL5YvpYk+EYu4S7syMJbnw3oc\nEDUDfn6WCOgrjXPqR8cMIhIBu5I+s85Vr5mN4H0XXJ8D0kYGxli4XqQsZ+nvl0ZE\nq0QHceQ5mQPB9X27me03ClfDd5I7NKA7hP/YNOId9RoZsqCEUueCXmd3GxNEknC8\nnkCoiscZAgMBAAECggEAEqeFDbmfVmMTluzcc+kluUgoCbS4J8Fndng+olfccynZ\nscQljok+B+81Kq3uLVpJ1QjqCxE/38tWhFGCCzFO8tBPQ/RB3fBt9MturUTtsa00\n+JWy9sEAPuPKazWyMOGXsTRJ/sH0hxLCSPq802IblLilFKklmVW8Il/d2/wz6jiq\nCxAoFCAC43gBk6GxU//oMdjOBeV+Lz27JXFiy/Ee5Joh5mZQsjGJVOL1pf+ftOfK\naQvIUwMnsc30ANa0HS1A+3aXJTKpRMeDlRVlB+zszpiF9w6YFWOU0X3Lze05RwAg\nq2fELLIhr31HCCzmBJD6tu95qFxWSxBI3zKqC4ylLQKBgQDUWvEksb6oA3XH3/7a\nODUDlfGMCYZ62NfrnR+U+aTq4sG2sFRnzY9uT59ZJSDzEUBy+4J4TbzoqPAaS/1z\neMKwdIf5E5GBGAkhsgOfb9fe+Is9gG7aZ2K8P6DUTlL0rYMalTtoF+8VmQRI9FT+\nXiQMLSpWzOT54KsaqZp+tVZIzwKBgQDRTL3JVa9bFExpdp0o/jr/0uqjvG3OR8Ic\nJA6oZnxLw4ciueEEJOEhR5H1rFCKfAIDvhjd3i5dGbelo5q3fJlWV9lu9h0HyEUR\ndvo2kfr3Ahx6U1gDfRdAfMbD+T57Dnj0Gds78y7L6kBa3diH1d/33+ctSEJKaypw\nFkFJJYgblwKBgQDR47FFG4neds0LaZJ0DeoYSTQdvax1764662ozzSv8HXRqJY7H\nqp2B4qEVc2VF2l9hRsaGMg/txkzLMSCp6UpFLmjW/0hp2F/uNgzuoZU0hWTavP7U\nUCt+9UT5kxDbVkSnGalGEaH2Lu/VS+pWIKZwgpO+h3YqpK16BPj3FDTccQKBgQCU\nLi/j3j0zT5C1zhuAjVW6D1q+J8baF6XPBJw4D68KeNkw9cbghze4txIYjDHNifRn\nL+wtEINkuLNzmvwL0jRBlBrF24s8GkcEEWcewYWb4avF00Hp3mNa7bxPvSPGPb3W\nnIPB0u8bwbJkYtJNgVd7B9OFFLaSN4MpLih0oBTX6wKBgAt6+knm7cPn+qVGUNfZ\nFdOTLjqkHL3KC1jdc2CUwoq9h/5DJVUjKud1EEdYJek5mzmPBXkS5zeczRYnDh3g\ntQ3AkVa4ekUJJRyfbCTJx7RH0/0ebeUbfoKvJCowj6sKXl3WBzdck1uVNaGZsHxR\nqQDiU+yvA9uQ1lnXTS0c0d7E\n-----END PRIVATE KEY-----\n",
+  "client_email": "coursemanagement@causal-medium-400416.iam.gserviceaccount.com",
+  "client_id": "110400925058341911128",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/coursemanagement%40causal-medium-400416.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
